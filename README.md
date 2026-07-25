@@ -97,7 +97,7 @@ The frontend will run at the Vite development URL shown in the terminal.
 - POST /api/auth/login
 - GET /api/auth/logout
 - GET /api/auth/get-me
-
+ 
 ## Notes
 
 - The backend expects authentication cookies to be sent for protected routes.
