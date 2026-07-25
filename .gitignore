@@ -21,3 +21,6 @@ dist-ssr/
 .vscode/
 .idea/
 .DS_Store
+
+# Agent workspace logs
+brain/
