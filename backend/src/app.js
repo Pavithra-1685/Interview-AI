@@ -13,15 +13,23 @@ const allowedOrigins = [
   'http://localhost:5174',
   'http://localhost:3000',
   process.env.FRONTEND_URL
-].filter(Boolean);
+].filter(Boolean).map(url => url.trim().replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+        
+        const cleanOrigin = origin.trim().replace(/\/$/, "");
+        const isAllowed = allowedOrigins.includes(cleanOrigin) || 
+                          allowedOrigins.includes('*') ||
+                          process.env.NODE_ENV !== 'production';
+
+        if (isAllowed) {
             return callback(null, true);
+        } else {
+            console.error(`[CORS Blocked] Origin: "${origin}" is not in the allowed list:`, allowedOrigins);
+            return callback(new Error(`Not allowed by CORS. Origin "${origin}" is not permitted.`));
         }
-        return callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
