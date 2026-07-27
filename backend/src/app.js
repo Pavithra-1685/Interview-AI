@@ -16,22 +16,10 @@ const allowedOrigins = [
   process.env.FRONTEND_URL
 ].filter(Boolean).map(url => url.trim().replace(/\/$/, ""));
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        
-        const cleanOrigin = origin.trim().replace(/\/$/, "");
-        const isAllowed = allowedOrigins.includes(cleanOrigin) || 
-                          allowedOrigins.includes('*') ||
-                          process.env.NODE_ENV !== 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
-        if (isAllowed) {
-            return callback(null, true);
-        } else {
-            console.error(`[CORS Blocked] Origin: "${origin}" is not in the allowed list:`, allowedOrigins);
-            return callback(null, false);
-        }
-    },
+app.use(cors({
+    origin: isProduction ? allowedOrigins : true,
     credentials: true
 }));
 
