@@ -42,4 +42,12 @@ const interviewRouter = require('./routes/interview.routes')
 app.use('/api/auth',authRouter);
 app.use('/api/interview',interviewRouter);
 
+app.get('/', (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "Interview AI Backend Server is running successfully!",
+        environment: process.env.NODE_ENV || "development"
+    });
+});
+
 module.exports = app;
