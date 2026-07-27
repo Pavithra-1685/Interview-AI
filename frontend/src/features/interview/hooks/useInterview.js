@@ -95,8 +95,19 @@ export const useInterview = () => {
         catch (error) {
             console.log(error)
             if (printWindow) printWindow.close()
-            const serverError = error.response?.data?.error || error.response?.data?.message || error.message
-            alert("Error generating resume: " + serverError + "\n\nStack:\n" + (error.response?.data?.stack || ""))
+            
+            let serverError = "An unknown error occurred."
+            if (error.response?.data) {
+                const data = error.response.data
+                if (typeof data === "object") {
+                    serverError = data.error?.message || data.message || JSON.stringify(data)
+                } else {
+                    serverError = data
+                }
+            } else {
+                serverError = error.message
+            }
+            alert("Error generating resume:\n\n" + serverError)
         }
     }
 
