@@ -535,3 +535,104 @@ $severity-low: #3fb950;
         box-shadow: 0 2px 6px rgba(#ff2d78, 0.2);
     }
 }
+
+// ── Responsive Layout Media Queries ───────────────────────────────────────────
+@media (max-width: 992px) {
+    .interview-page {
+        padding: 1rem;
+    }
+
+    .interview-layout {
+        flex-direction: column;
+        border-radius: 0.5rem;
+    }
+
+    .interview-divider {
+        display: none;
+    }
+
+    .interview-nav {
+        width: 100%;
+        border-bottom: 1px solid $border-color;
+        padding: 1.25rem 1rem;
+        gap: 1rem;
+
+        .nav-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        &__label {
+            display: none;
+        }
+
+        &__item {
+            width: auto;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            border-radius: 0.25rem;
+
+            &--back {
+                margin-bottom: 0;
+                padding-bottom: 0.5rem !important;
+                border-bottom: none;
+            }
+        }
+
+        .button.primary-button {
+            margin: 0.5rem 0 0;
+            width: 100%;
+        }
+    }
+
+    .interview-content {
+        max-height: none;
+        padding: 1.5rem 1.25rem;
+        overflow-y: visible;
+        padding-bottom: 2rem;
+    }
+
+    .interview-sidebar {
+        width: 100%;
+        border-top: 1px solid $border-color;
+        padding: 1.5rem 1.25rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+
+        .match-score, .skill-gaps {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .sidebar-divider {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .interview-page {
+        padding: 0.5rem;
+    }
+
+    .interview-nav {
+        .nav-content {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        &__item {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+
+    .interview-sidebar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

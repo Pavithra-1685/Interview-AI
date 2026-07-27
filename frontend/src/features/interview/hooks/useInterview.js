@@ -60,21 +60,42 @@ export const useInterview = () => {
     }
 
     const getResumePdf = async (interviewReportId) => {
-        setLoading(true)
-        let response = null
+        const printWindow = window.open("", "_blank")
+        if (printWindow) {
+            printWindow.document.write("<html><head><title>Generating Resume...</title><style>body{background:#0d1117;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;} h2{font-weight:400;animation:pulse 1.5s infinite;} @keyframes pulse{0%,100%{opacity:0.6;}50%{opacity:1;}}</style></head><body><h2>Generating your tailored resume, please wait...</h2></body></html>")
+        }
+
         try {
-            response = await generateResumePdf({ interviewReportId })
-            const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
-            const link = document.createElement("a")
-            link.href = url
-            link.setAttribute("download", `resume_${interviewReportId}.pdf`)
-            document.body.appendChild(link)
-            link.click()
+            const data = await generateResumePdf({ interviewReportId })
+            if (data && data.html) {
+                if (printWindow) {
+                    printWindow.document.open()
+                    printWindow.document.write(data.html)
+                    
+                    const autoPrintScript = printWindow.document.createElement("script")
+                    autoPrintScript.innerHTML = `
+                        window.onload = function() {
+                            window.print();
+                        };
+                        setTimeout(function() {
+                            if (!window.printCalled) {
+                                window.print();
+                                window.printCalled = true;
+                            }
+                        }, 1000);
+                    `
+                    printWindow.document.body.appendChild(autoPrintScript)
+                    printWindow.document.close()
+                }
+            } else {
+                if (printWindow) printWindow.close()
+                alert("Failed to generate resume HTML.")
+            }
         }
         catch (error) {
             console.log(error)
-        } finally {
-            setLoading(false)
+            if (printWindow) printWindow.close()
+            alert("Error generating resume.")
         }
     }
 

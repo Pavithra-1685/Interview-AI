@@ -1,5 +1,4 @@
 const { GoogleGenAI } = require("@google/genai")
-const puppeteer = require("puppeteer")
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
@@ -99,43 +98,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 
 
-async function generatePdfFromHtml(htmlContent) {
-    let browser;
-    try {
-        browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu"
-            ]
-        })
-        const page = await browser.newPage();
-        await page.setContent(htmlContent, { waitUntil: "networkidle0" })
-
-        const pdfBuffer = await page.pdf({
-            format: "A4",
-            margin: {
-                top: "20mm",
-                bottom: "20mm",
-                left: "15mm",
-                right: "15mm"
-            }
-        })
-
-        return pdfBuffer
-    } catch (e) {
-        console.error("Puppeteer PDF generation failed:", e);
-        throw e;
-    } finally {
-        if (browser) {
-            await browser.close();
-        }
-    }
-}
-
-async function generateResumePdf({ resume, selfDescription, jobDescription }) {
+async function generateResumeHtml({ resume, selfDescription, jobDescription }) {
 
     const resumePdfSchema = {
         type: "OBJECT",
@@ -173,10 +136,8 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
 
     const jsonContent = JSON.parse(response.text)
 
-    const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
-
-    return pdfBuffer
+    return jsonContent.html
 
 }
 
-module.exports = { generateInterviewReport, generateResumePdf }
+module.exports = { generateInterviewReport, generateResumeHtml }

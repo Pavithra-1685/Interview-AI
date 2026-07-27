@@ -1,5 +1,5 @@
 const pdfParse = require("pdf-parse")
-const { generateInterviewReport, generateResumePdf } = require("../services/ai.service")
+const { generateInterviewReport, generateResumeHtml } = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
 
@@ -114,18 +114,16 @@ async function generateResumePdfController(req, res) {
 
         const { resume, jobDescription, selfDescription } = interviewReport
 
-        const pdfBuffer = await generateResumePdf({ resume, jobDescription, selfDescription })
+        const htmlContent = await generateResumeHtml({ resume, jobDescription, selfDescription })
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `attachment; filename=resume_${interviewReportId}.pdf`
+        res.status(200).json({
+            status: "success",
+            html: htmlContent
         })
-
-        res.send(pdfBuffer)
     } catch (err) {
-        console.error("Failed to generate resume PDF:", err)
+        console.error("Failed to generate resume:", err)
         res.status(500).json({
-            message: "Failed to generate resume PDF.",
+            message: "Failed to generate resume.",
             error: err.message
         })
     }
