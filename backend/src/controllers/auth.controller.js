@@ -16,13 +16,14 @@ const cookieOptions = {
  * @access Public
  */
 async function registerUserController(req,res){
-  const {username,email,password} = req.body;
+  try {
+    const {username,email,password} = req.body;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({
-      message: "Please provide username, email and password"
-    })
-  }  
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        message: "Please provide username, email and password"
+      })
+    }  
 
 
     const isUserAlreadyExists = await userModel.findOne({
@@ -60,7 +61,13 @@ async function registerUserController(req,res){
       }
       
     })
-     
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({
+      message: "An error occurred during registration.",
+      error: error.message
+    });
+  }
 } 
 
 /**
@@ -70,40 +77,48 @@ async function registerUserController(req,res){
  */
 
 async function loginUserController(req,res){
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email });
 
-  if (!user) {
-    return res.status(400).json({
-      message: "Invalid email or password"
-    })
-  }
-  
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordValid) {
-    return res.status(400).json({
-      message: "Invalid email or password"
-    })
-  }
-
-  const token = jwt.sign(
-    { id: user._id, username: user.username },
-    process.env.JWT_SECRET,
-    { expiresIn: '1d' }
-  );
-
-  res.cookie('token', token, cookieOptions);
-
-  res.status(200).json({
-    message: "Login successful",
-    user: {
-      id: user._id,
-      username: user.username,
-      email: user.email
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email or password"
+      })
     }
-  });
+    
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        message: "Invalid email or password"
+      })
+    }
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.cookie('token', token, cookieOptions);
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      message: "An error occurred during login.",
+      error: error.message
+    });
+  }
 }
 
 /**
