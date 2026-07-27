@@ -12,6 +12,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',
+  'https://interview-ai-two-roan.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean).map(url => url.trim().replace(/\/$/, ""));
 
@@ -28,7 +29,7 @@ app.use(cors({
             return callback(null, true);
         } else {
             console.error(`[CORS Blocked] Origin: "${origin}" is not in the allowed list:`, allowedOrigins);
-            return callback(new Error(`Not allowed by CORS. Origin "${origin}" is not permitted.`));
+            return callback(null, false);
         }
     },
     credentials: true
