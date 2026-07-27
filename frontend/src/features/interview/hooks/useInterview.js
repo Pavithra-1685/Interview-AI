@@ -95,7 +95,8 @@ export const useInterview = () => {
         catch (error) {
             console.log(error)
             if (printWindow) printWindow.close()
-            alert("Error generating resume.")
+            const serverError = error.response?.data?.error || error.response?.data?.message || error.message
+            alert("Error generating resume: " + serverError + "\n\nStack:\n" + (error.response?.data?.stack || ""))
         }
     }
 
