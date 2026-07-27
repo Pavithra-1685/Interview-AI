@@ -124,7 +124,8 @@ async function generateResumePdfController(req, res) {
         console.error("Failed to generate resume:", err)
         res.status(500).json({
             message: "Failed to generate resume.",
-            error: err.message
+            error: err.message,
+            stack: err.stack
         })
     }
 }
