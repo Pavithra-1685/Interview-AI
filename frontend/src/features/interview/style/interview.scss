@@ -441,8 +441,19 @@ $severity-low: #3fb950;
     &__sub {
         margin: 0;
         font-size: 0.75rem;
-        color: $severity-low;
         text-align: center;
+
+        &--high {
+            color: $severity-low;
+        }
+
+        &--mid {
+            color: $severity-medium;
+        }
+
+        &--low {
+            color: $severity-high;
+        }
     }
 }
 

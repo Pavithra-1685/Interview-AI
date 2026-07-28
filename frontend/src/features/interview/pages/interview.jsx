@@ -83,6 +83,26 @@ const Interview = () => {
         report.matchScore >= 80 ? 'score--high' :
             report.matchScore >= 60 ? 'score--mid' : 'score--low'
 
+    const getMatchDetails = (score) => {
+        if (score >= 80) {
+            return {
+                text: 'Strong match for this role',
+                class: 'match-score__sub--high'
+            }
+        }
+        if (score >= 60) {
+            return {
+                text: 'Moderate match for this role',
+                class: 'match-score__sub--mid'
+            }
+        }
+        return {
+            text: 'Weak match for this role',
+            class: 'match-score__sub--low'
+        }
+    }
+    const matchDetails = getMatchDetails(report.matchScore)
+
 
     return (
         <div className='interview-page'>
@@ -179,7 +199,7 @@ const Interview = () => {
                             <span className='match-score__value'>{report.matchScore}</span>
                             <span className='match-score__pct'>%</span>
                         </div>
-                        <p className='match-score__sub'>Strong match for this role</p>
+                        <p className={`match-score__sub ${matchDetails.class}`}>{matchDetails.text}</p>
                     </div>
 
                     <div className='sidebar-divider' />
