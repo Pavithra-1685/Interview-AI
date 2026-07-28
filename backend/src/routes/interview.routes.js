@@ -37,6 +37,11 @@ interviewRouter.get("/", authMiddleware.authUser, interviewController.getAllInte
  */
 interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUser, interviewController.generateResumePdfController)
 
-
+/**
+ * @route GET /api/interview/test-gemini
+ * @description test Gemini API connectivity and configurations.
+ * @access public
+ */
+interviewRouter.get("/test-gemini", interviewController.testGeminiController)
 
 module.exports = interviewRouter

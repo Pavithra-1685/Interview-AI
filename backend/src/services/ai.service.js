@@ -140,4 +140,46 @@ async function generateResumeHtml({ resume, selfDescription, jobDescription }) {
 
 }
 
-module.exports = { generateInterviewReport, generateResumeHtml }
+async function testGeminiConnection() {
+    const results = {};
+    results.apiKeyPresent = !!process.env.GOOGLE_GENAI_API_KEY;
+    results.apiKeyLength = process.env.GOOGLE_GENAI_API_KEY ? process.env.GOOGLE_GENAI_API_KEY.length : 0;
+    
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-3.1-flash-lite",
+            contents: "Hello, this is a test.",
+        });
+        results.gemini_3_1_flash_lite = {
+            success: true,
+            text: response.text
+        };
+    } catch (err) {
+        results.gemini_3_1_flash_lite = {
+            success: false,
+            error: err.message,
+            stack: err.stack
+        };
+    }
+
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: "Hello, this is a test.",
+        });
+        results.gemini_3_flash_preview = {
+            success: true,
+            text: response.text
+        };
+    } catch (err) {
+        results.gemini_3_flash_preview = {
+            success: false,
+            error: err.message,
+            stack: err.stack
+        };
+    }
+
+    return results;
+}
+
+module.exports = { generateInterviewReport, generateResumeHtml, testGeminiConnection }

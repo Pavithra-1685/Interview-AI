@@ -1,5 +1,5 @@
 const pdfParse = require("pdf-parse")
-const { generateInterviewReport, generateResumeHtml } = require("../services/ai.service")
+const { generateInterviewReport, generateResumeHtml, testGeminiConnection } = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
 
@@ -130,4 +130,26 @@ async function generateResumePdfController(req, res) {
     }
 }
 
-module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }
+async function testGeminiController(req, res) {
+    try {
+        const results = await testGeminiConnection()
+        res.status(200).json({
+            status: "success",
+            results
+        })
+    } catch (err) {
+        res.status(500).json({
+            status: "error",
+            message: err.message,
+            stack: err.stack
+        })
+    }
+}
+
+module.exports = { 
+    generateInterViewReportController, 
+    getInterviewReportByIdController, 
+    getAllInterviewReportsController, 
+    generateResumePdfController,
+    testGeminiController
+}
