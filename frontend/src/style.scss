@@ -18,3 +18,32 @@ body,
 .highlight{
     color: #d20d3b;
 }
+
+.loading-screen {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+
+    h1 {
+        font-size: 1.5rem;
+        color: #e6edf3;
+        font-weight: 600;
+        animation: loadingPulse 1.5s infinite ease-in-out;
+        margin: 0;
+    }
+}
+
+@keyframes loadingPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
