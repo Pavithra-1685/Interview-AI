@@ -39,4 +39,28 @@ app.get('/', (req, res) => {
     });
 });
 
+// Global error handling middleware
+app.use((err, req, res, next) => {
+    console.error("Unhandled Server Error:", err);
+    
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+            message: "File upload failed.",
+            error: "The uploaded file is too large. Maximum allowed size is 10MB."
+        });
+    }
+    
+    if (err.name === 'MulterError') {
+        return res.status(400).json({
+            message: "File upload failed.",
+            error: err.message
+        });
+    }
+    
+    res.status(err.status || 500).json({
+        message: err.message || "Internal server error occurred.",
+        error: err.stack
+    });
+});
+
 module.exports = app;
