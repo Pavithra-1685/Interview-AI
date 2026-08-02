@@ -42,11 +42,11 @@ const Home = () => {
             return
         }
 
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-        if (data && data._id) {
-            navigate(`/interview/${data._id}`)
+        const result = await generateReport({ jobDescription, selfDescription, resumeFile })
+        if (result.success && result.data && result.data._id) {
+            navigate(`/interview/${result.data._id}`)
         } else {
-            alert("Failed to generate interview strategy. Please verify your inputs and API keys.")
+            alert(`Failed to generate interview strategy: ${result.error || "Please verify your inputs and API keys."}`)
         }
     }
 

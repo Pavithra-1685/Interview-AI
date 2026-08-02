@@ -17,17 +17,17 @@ export const useInterview = () => {
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
+            const response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
+            return { success: true, data: response.interviewReport }
         } catch (error) {
             console.log(error)
+            const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || "Unknown error"
+            return { success: false, error: errorMsg }
         } finally {
             setLoading(false)
         }
-
-        return response ? response.interviewReport : null
     }
 
     const getReportById = async (interviewId) => {
