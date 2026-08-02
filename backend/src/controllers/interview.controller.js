@@ -13,8 +13,8 @@ async function generateInterViewReportController(req, res) {
         let resumeText = ""
         if (req.file) {
             try {
-                const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
-                resumeText = resumeContent.text
+                const resumeContent = await (new pdfParse.PDFParse(new Uint8Array(req.file.buffer))).getText()
+                resumeText = resumeContent.text ? resumeContent.text.replace(/[^\x20-\x7E\n\r\t]/g, '').substring(0, 3000) : ""
             } catch (err) {
                 console.error("Failed to parse resume PDF:", err)
             }
